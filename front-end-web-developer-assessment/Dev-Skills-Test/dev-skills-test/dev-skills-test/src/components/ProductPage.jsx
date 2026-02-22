@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "../styles/ProductPage.css";
 import productData from "../data/product.json";
+import { useDeliveryDate } from "../hooks/useDeliveryDate";
 
 export default function ProductPage() {
   const { id, name, basePrice, description, colors, sizes, delivery } =
@@ -59,7 +60,8 @@ export default function ProductPage() {
   const handleDecrease = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
   const handleIncrease = () => setQuantity((q) => q + 1);
 
-  // Provided variable they can reuse when building their Cart Summary
+  const deliveryDate = useDeliveryDate(delivery);
+
   const cartTotal = cartItems.reduce((sum, item) => sum + item.total, 0);
 
   useEffect(() => {
@@ -295,8 +297,8 @@ export default function ProductPage() {
                   calendar_month
                 </i>
                 <div>
-                  <h4>{delivery.month}</h4>
-                  <h1>{delivery.day}</h1>
+                  <h4>{deliveryDate.month}</h4>
+                  <h1>{deliveryDate.day}</h1>
                 </div>
               </section>
             </div>
