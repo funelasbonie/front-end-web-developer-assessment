@@ -1,23 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="en"> 
 
 <head>
-
 	<meta charset="utf-8" />
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Form Example</title>
-
-	<style>
-		body{
-			background-color:#ccc;
-		}
-		#content{
-			margin:30px;
-			background-color: #fff;
-			padding:20px 15px;
-			border:1px solid #999;
-		}
-	</style>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -35,13 +26,42 @@
 		</p>
 
 		<h2>These are a few of my favorite things....</h2>
-		<form action="thankYou.html" method="get">
-		  Favorite Song:   <input type="text" name="question1" ><br/><br/>
-		  Favorite Color:   <input type="text" name="question2" ><br/><br/>
-		  Favorite Movie:   <input type="text" name="question2" ><br/><br/>
-		  Favorite Food:   <input type="text" name="question2" ><br/><br/>
-		  <input type="submit" value="Submit">
+		<form id="favoritesForm" action="thankYou.html" method="get">
+		  <div class="form-field">
+			<label for="question1">Favorite Song:</label>
+			<div class="input-wrapper">
+				<input type="text" name="question1" id="question1">
+				<span class="success-icon" id="success1">✓</span>
+			</div>
+			<span class="error-message" id="error1">Please enter your favorite song.</span>
+		  </div>
+		  <div class="form-field">
+			<label for="question2">Favorite Color:</label>
+			<div class="input-wrapper">
+				<input type="text" name="question2" id="question2">
+				<span class="success-icon" id="success2">✓</span>
+			</div>
+			<span class="error-message" id="error2">Please enter your favorite color.</span>
+		  </div>
+		  <div class="form-field">
+			<label for="question3">Favorite Movie:</label>
+			<div class="input-wrapper">
+				<input type="text" name="question3" id="question3">
+			</div>
+		  </div>
+		  <div class="form-field">
+			<label for="question4">Favorite Food:</label>
+			<div class="input-wrapper">
+				<input type="text" name="question4" id="question4">
+			</div>
+		  </div>
+		  <div class="form-actions">
+			<input type="submit" value="Submit">
+		  </div>
 		</form>
 	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="js/form-validation.js"></script>
 </body>
 </html>
