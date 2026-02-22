@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "../styles/Header.css";
+import { useClickOutside } from "../hooks/useClickOutside";
+import CartPanel from "./CartPanel";
+import WishlistPanel from "./WishlistPanel";
 
 export default function Header({ cartItems = [], wishlistItems = [] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [cartPanelOpen, setCartPanelOpen] = useState(false);
+  const [wishlistPanelOpen, setWishlistPanelOpen] = useState(false);
+  
+  const cartPanelRef = useRef(null);
+  const wishlistPanelRef = useRef(null);
+  
+  useClickOutside(cartPanelRef, () => setCartPanelOpen(false));
+  useClickOutside(wishlistPanelRef, () => setWishlistPanelOpen(false));
 
   const toggleMenu = () => {
     if (menuOpen) {
@@ -53,14 +64,41 @@ export default function Header({ cartItems = [], wishlistItems = [] }) {
         </div>
 
         <div className="nav-icons-container">
-          <button className="icon-button cart-btn" title="View Cart">
-            <span className="material-symbols-outlined">shopping_cart</span>
-            <span className="icon-count">{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>
-          </button>
-          <button className="icon-button wishlist-btn" title="View Favorites">
-            <span className="material-symbols-outlined">favorite</span>
-            <span className="icon-count">{wishlistItems.length}</span>
-          </button>
+          <div className="panel-wrapper" ref={cartPanelRef}>
+            <button 
+              className={`icon-button cart-btn ${cartPanelOpen ? "active" : ""}`} 
+              title="View Cart"
+              onClick={() => {
+                setCartPanelOpen(!cartPanelOpen);
+                setWishlistPanelOpen(false);
+              }}
+            >
+              <span className="material-symbols-outlined">shopping_cart</span>
+              <span className="icon-count">{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>
+            </button>
+            <CartPanel 
+              cartItems={cartItems} 
+              isOpen={cartPanelOpen} 
+            />
+          </div>
+          
+          <div className="panel-wrapper" ref={wishlistPanelRef}>
+            <button 
+              className={`icon-button wishlist-btn ${wishlistPanelOpen ? "active" : ""}`} 
+              title="View Favorites"
+              onClick={() => {
+                setWishlistPanelOpen(!wishlistPanelOpen);
+                setCartPanelOpen(false);
+              }}
+            >
+              <span className="material-symbols-outlined">favorite</span>
+              <span className="icon-count">{wishlistItems.length}</span>
+            </button>
+            <WishlistPanel 
+              wishlistItems={wishlistItems} 
+              isOpen={wishlistPanelOpen} 
+            />
+          </div>
           <button className="login-btn" title="Log In">
             <span className="material-symbols-outlined">account_circle</span>
             <span className="icon-label">Log In</span>
