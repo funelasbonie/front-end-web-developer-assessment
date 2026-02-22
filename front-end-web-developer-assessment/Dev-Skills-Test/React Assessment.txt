@@ -1,0 +1,14 @@
+Attached is a small React project that has been intentionally simplified and partially incomplete. Your task is to complete a series of exercises that demonstrate your ability to work with existing code, debug issues, and add new features.
+Instructions:
+Download and unzip the provided project file.
+Open a terminal in the project root and run:
+npm install
+npm run dev
+ 
+The project will load at http://localhost:5173
+ Review the README.md file included in the project for detailed task descriptions and setup instructions.
+ Complete as many of the five tasks as you can. Tasks 1–4 are the core exercises; Task 5 is an optional bonus challenge.
+ When finished, zip your completed project folder (excluding node_modules) and name it:
+firstname_lastname_frontend_test.zip
+Submit the zip file.
+Please note that there’s no strict time limit, but we recommend spending about 2–3 hours total.

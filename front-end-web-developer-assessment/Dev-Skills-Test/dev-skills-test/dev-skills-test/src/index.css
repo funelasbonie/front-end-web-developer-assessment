@@ -1,0 +1,14 @@
+@import "./styles/variables.css";
+
+* {
+  font-family: "Open Sans", sans-serif;
+  box-sizing: border-box;
+  margin: 0px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  color: var(--text-color);
+  background-color: rgb(254, 251, 250);
+}

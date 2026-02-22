@@ -1,0 +1,32 @@
+{
+  "id": "WT8GST002",
+  "name": "Port Authority Ladies Stretch Heather Open Neck",
+  "basePrice": 11.25,
+  "description": "With an elevated heather look, this office-ready top has plenty of stretch for unrestricted movement. Moisture wicking, 5.2-ounce, 93/7 poly/spandex jersey with tag-free label and open neckline.",
+  "colors": [
+    {
+      "name": "Gray",
+      "hex": "#808080",
+      "image": "https://ik.imagekit.io/i9tsuapxspz/20230130000/Item_Images/WT8GST002GRY.jpg"
+    },
+    {
+      "name": "Light Gray",
+      "hex": "#D3D3D3",
+      "image": "https://ik.imagekit.io/i9tsuapxspz/20230130000/Item_Images/WT8GST002LTG.jpg"
+    },
+    {
+      "name": "Purple",
+      "hex": "#7A32B9",
+      "image": "https://ik.imagekit.io/i9tsuapxspz/20230130000/Item_Images/WT8GST002PRP.jpg"
+    }
+  ],
+  "sizes": ["XSM", "SMA", "MED", "LRG", "XLG", "2XL", "3XL", "4XL"],
+
+  "delivery": {
+    "processing": "1 Business Day",
+    "production": "10 Business Days",
+    "transit": "5 Business Days",
+    "month": "November",
+    "day": "20"
+  }
+}

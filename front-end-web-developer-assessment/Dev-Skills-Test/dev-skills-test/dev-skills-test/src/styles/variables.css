@@ -1,0 +1,10 @@
+:root {
+  --brand-green: #007b00;
+  --text-color: #222;
+  --border-color: #ddd;
+  --font-family: system-ui, sans-serif;
+
+  /* Additional from product pages */
+  --primary: rgb(218, 41, 28);
+  --text-dark: rgb(24, 19, 18);
+}
