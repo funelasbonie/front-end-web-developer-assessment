@@ -43,6 +43,8 @@ export default function ProductPage() {
       id,
       name,
       color: selectedColor.name,
+      colorHex: selectedColor.hex,
+      image: selectedColor.image,
       size: selectedSize,
       quantity,
       price: basePrice,
@@ -50,10 +52,24 @@ export default function ProductPage() {
     };
     setCartItems((prev) => [...prev, newItem]);
     setQuantity(1);
+  };
 
-    // Temporary feedback for candidates
-    alert(
-      "Item added to cart! Now build a Cart Summary section to display your cart items below."
+  const handleRemoveItem = (index) => {
+    setCartItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleUpdateQuantity = (index, newQuantity) => {
+    if (newQuantity < 1) return;
+    setCartItems((prev) =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              quantity: newQuantity,
+              total: item.price * newQuantity,
+            }
+          : item
+      )
     );
   };
 
@@ -306,7 +322,83 @@ export default function ProductPage() {
         </section>
       </div>
 
-      {/* TODO: Build Cart Summary component here */}
+      {cartItems.length > 0 && (
+        <div className="cart-summary">
+          <div className="cart-summary-header">
+            <h2 className="cart-summary-title">
+              <i className="material-symbols-outlined">shopping_cart</i>
+              Cart Summary ({cartItems.length} {cartItems.length === 1 ? "item" : "items"})
+            </h2>
+          </div>
+          <div className="cart-items">
+            {cartItems.map((item, index) => (
+              <div key={index} className="cart-item">
+                <div className="cart-item-image">
+                  <img src={item.image} alt={`${item.name} in ${item.color}`} />
+                  <div
+                    className="cart-item-color-indicator"
+                    style={{ backgroundColor: item.colorHex }}
+                    title={item.color}
+                  ></div>
+                </div>
+                <div className="cart-item-details">
+                  <h3 className="cart-item-name">{item.name}</h3>
+                  <div className="cart-item-attributes">
+                    <span className="cart-item-attribute">
+                      <strong>Color:</strong> {item.color}
+                    </span>
+                    <span className="cart-item-attribute">
+                      <strong>Size:</strong> {item.size}
+                    </span>
+                  </div>
+                  <div className="cart-item-quantity-controls">
+                    <label>Quantity:</label>
+                    <div className="quantity-controls">
+                      <button
+                        className="quantity-btn"
+                        onClick={() => handleUpdateQuantity(index, item.quantity - 1)}
+                        aria-label="Decrease quantity"
+                      >
+                        <i className="material-symbols-outlined">remove</i>
+                      </button>
+                      <span className="quantity-value">{item.quantity}</span>
+                      <button
+                        className="quantity-btn"
+                        onClick={() => handleUpdateQuantity(index, item.quantity + 1)}
+                        aria-label="Increase quantity"
+                      >
+                        <i className="material-symbols-outlined">add</i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="cart-item-delivery">
+                    <i className="material-symbols-outlined">local_shipping</i>
+                    <span>Est. Delivery: {deliveryDate.month} {deliveryDate.day}</span>
+                  </div>
+                </div>
+                <div className="cart-item-price-section">
+                  <div className="cart-item-unit-price">${item.price.toFixed(2)} each</div>
+                  <div className="cart-item-price">${item.total.toFixed(2)}</div>
+                </div>
+                <button
+                  className="cart-item-remove"
+                  onClick={() => handleRemoveItem(index)}
+                  aria-label="Remove item"
+                  title="Remove item"
+                >
+                  <i className="material-symbols-outlined">delete_outline</i>
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="cart-summary-footer">
+            <div className="cart-total">
+              <div className="cart-total-label">Grand Total:</div>
+              <div className="cart-total-amount">${cartTotal.toFixed(2)}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
