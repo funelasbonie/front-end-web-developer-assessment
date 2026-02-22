@@ -3,8 +3,18 @@ import "../styles/Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
   const toggleMenu = () => {
-    setMenuOpen(true);
+    if (menuOpen) {
+      setIsClosing(true);
+      setTimeout(() => {
+        setMenuOpen(false);
+        setIsClosing(false);
+      }, 250);
+    } else {
+      setMenuOpen(true);
+    }
   };
 
   return (
@@ -103,10 +113,10 @@ export default function Header() {
       </nav>
 
       {/* Mobile Drawer Menu */}
-      {menuOpen && (
+      {(menuOpen || isClosing) && (
         <>
-          <div className="mobile-overlay" onClick={toggleMenu}></div>
-          <aside className="mobile-menu">
+          <div className={`mobile-overlay ${isClosing ? "closing" : ""}`} onClick={toggleMenu}></div>
+          <aside className={`mobile-menu ${isClosing ? "closing" : ""}`}>
             <header className="mobile-menu-header">
               <span className="material-symbols-outlined red-icon">menu</span>
               <h3>Menu</h3>
