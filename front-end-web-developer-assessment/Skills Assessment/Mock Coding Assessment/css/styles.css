@@ -489,3 +489,159 @@ ul {
 .footer-nav a:hover {
     color: var(--light-orange);
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .utility-bar-content {
+        gap: 15px;
+        padding: 0 15px;
+    }
+
+    .utility-links {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .utility-links a {
+        font-size: 11px;
+    }
+
+    .cart-info {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    .main-header {
+        top: 38px;
+        padding: 10px 0;
+    }
+
+    .header-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 0 15px;
+    }
+
+    .logo-section {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .main-logo {
+        height: 50px;
+    }
+
+    .main-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 15px;
+        justify-content: space-between;
+    }
+
+    .nav-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .search-section {
+        width: auto;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .hero-section {
+        margin-top: 120px;
+        padding: 40px 0;
+        min-height: 350px;
+    }
+
+    .hero-overlay {
+        width: 100%;
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+
+    .hero-icon {
+        width: 10rem;
+    }
+
+    .hero-title {
+        font-size: 32px;
+        letter-spacing: 2px;
+    }
+
+    .hero-subtitle {
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+
+    .main-content {
+        padding: 40px 15px;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .welcome-text {
+        font-size: 14px;
+        max-width: 100%;
+    }
+
+    .category-banners {
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .banner-card {
+        max-width: 100%;
+    }
+
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        max-width: 100%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .utility-links {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 24px;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .banner-title {
+        font-size: 28px;
+    }
+}
