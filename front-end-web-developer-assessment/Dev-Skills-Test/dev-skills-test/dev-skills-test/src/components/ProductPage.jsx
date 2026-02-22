@@ -3,16 +3,17 @@ import "../styles/ProductPage.css";
 import productData from "../data/product.json";
 import { useDeliveryDate } from "../hooks/useDeliveryDate";
 
-export default function ProductPage() {
+export default function ProductPage({ cartItems, setCartItems, wishlistItems, setWishlistItems }) {
   const { id, name, basePrice, description, colors, sizes, delivery } =
     productData;
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
-  const [cartItems, setCartItems] = useState([]);
   const [shareUrl, setShareUrl] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") setShareUrl(window.location.href);
@@ -38,6 +39,11 @@ export default function ProductPage() {
     [shareUrl]
   );
 
+  const handleColorChange = (color) => {
+    if (color.name === selectedColor.name) return;
+    setSelectedColor(color);
+  };
+
   const handleAddToCart = () => {
     const newItem = {
       id,
@@ -52,7 +58,34 @@ export default function ProductPage() {
     };
     setCartItems((prev) => [...prev, newItem]);
     setQuantity(1);
+    setToastMessage(`Added ${quantity} ${quantity === 1 ? "item" : "items"} to cart!`);
+    setTimeout(() => {
+      setToastMessage("");
+    }, 3000);
   };
+
+  const handleToggleFavorite = () => {
+    const item = {
+      id,
+      name,
+      color: selectedColor.name,
+      image: selectedColor.image,
+      price: basePrice,
+    };
+    
+    if (isFavorite) {
+      setWishlistItems((prev) => prev.filter((w) => w.id !== id));
+      setIsFavorite(false);
+    } else {
+      setWishlistItems((prev) => [...prev, item]);
+      setIsFavorite(true);
+    }
+  };
+
+  useEffect(() => {
+    const isInWishlist = wishlistItems.some((item) => item.id === id);
+    setIsFavorite(isInWishlist);
+  }, [wishlistItems, id]);
 
   const handleRemoveItem = (index) => {
     setCartItems((prev) => prev.filter((_, i) => i !== index));
@@ -170,10 +203,12 @@ export default function ProductPage() {
           </div>
 
           <i
-            className="material-symbols-outlined favorite-icon"
-            title="Favorite"
+            className={`material-symbols-outlined favorite-icon ${isFavorite ? "filled active" : ""}`}
+            title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            onClick={handleToggleFavorite}
+            style={{ cursor: "pointer" }}
           >
-            favorite_border
+            {isFavorite ? "favorite" : "favorite_border"}
           </i>
         </header>
 
@@ -205,7 +240,7 @@ export default function ProductPage() {
                     className={`color-swatch ${
                       selectedColor.name === color.name ? "selected" : ""
                     }`}
-                    onClick={() => setSelectedColor(color)}
+                    onClick={() => handleColorChange(color)}
                     title={color.name}
                     aria-label={color.name}
                   />
@@ -233,36 +268,39 @@ export default function ProductPage() {
             <div className="quantity-section">
               <label htmlFor="quantity">QUANTITY:</label>
               <div className="quantity-wrapper">
+                <button
+                  className="quantity-btn-decrease"
+                  onClick={handleDecrease}
+                  aria-label="Decrease quantity"
+                  disabled={quantity <= 1}
+                >
+                  <i className="material-symbols-outlined">remove</i>
+                </button>
                 <input
                   id="quantity"
-                  type="text"
+                  type="number"
                   min="1"
                   value={quantity}
-                  readOnly
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value) || 1;
+                    setQuantity(Math.max(1, val));
+                  }}
                   className="qty-input"
                 />
-                <div className="controls">
-                  <i
-                    className="material-symbols-outlined"
-                    onClick={handleDecrease}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    remove_circle_outline
-                  </i>
-                  <i
-                    className="material-symbols-outlined"
-                    onClick={handleIncrease}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    add_circle_outline
-                  </i>
-                </div>
+                <button
+                  className="quantity-btn-increase"
+                  onClick={handleIncrease}
+                  aria-label="Increase quantity"
+                >
+                  <i className="material-symbols-outlined">add</i>
+                </button>
               </div>
             </div>
 
-            <button className="add-to-cart" onClick={handleAddToCart}>
+            <button 
+              className="add-to-cart" 
+              onClick={handleAddToCart}
+            >
               Add To Cart
             </button>
 
@@ -321,6 +359,13 @@ export default function ProductPage() {
           </div>
         </section>
       </div>
+
+      {toastMessage && (
+        <div className="toast-notification">
+          <i className="material-symbols-outlined">check_circle</i>
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
       {cartItems.length > 0 && (
         <div className="cart-summary">

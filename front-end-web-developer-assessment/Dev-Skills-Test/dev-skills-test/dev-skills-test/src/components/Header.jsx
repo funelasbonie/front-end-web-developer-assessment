@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/Header.css";
 
-export default function Header() {
+export default function Header({ cartItems = [], wishlistItems = [] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -55,11 +55,11 @@ export default function Header() {
         <div className="nav-icons-container">
           <button className="icon-button cart-btn" title="View Cart">
             <span className="material-symbols-outlined">shopping_cart</span>
-            <span className="icon-count">0</span>
+            <span className="icon-count">{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>
           </button>
           <button className="icon-button wishlist-btn" title="View Favorites">
             <span className="material-symbols-outlined">favorite</span>
-            <span className="icon-count">0</span>
+            <span className="icon-count">{wishlistItems.length}</span>
           </button>
           <button className="login-btn" title="Log In">
             <span className="material-symbols-outlined">account_circle</span>
@@ -182,13 +182,13 @@ export default function Header() {
                 </button>
                 <button className="icon-button wishlist-btn" title="Favorites">
                   <span className="material-symbols-outlined">favorite</span>
-                  <span className="icon-count">0</span>
+                  <span className="icon-count">{wishlistItems.length}</span>
                 </button>
                 <button className="icon-button cart-btn" title="View Cart">
                   <span className="material-symbols-outlined">
                     shopping_cart
                   </span>
-                  <span className="icon-count">0</span>
+                  <span className="icon-count">{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>
                 </button>
               </div>
             </div>
