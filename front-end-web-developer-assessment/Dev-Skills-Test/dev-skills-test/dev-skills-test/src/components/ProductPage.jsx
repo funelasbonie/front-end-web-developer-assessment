@@ -1,7 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState, useRef } from "react";
 import "../styles/ProductPage.css";
 import productData from "../data/product.json";
 import { useDeliveryDate } from "../hooks/useDeliveryDate";
+import { useToast } from "../hooks/useToast";
+import { useShareLinks } from "../hooks/useShareLinks";
+import { useClickOutside } from "../hooks/useClickOutside";
+import { useFavorite } from "../hooks/useFavorite";
 
 export default function ProductPage({ cartItems, setCartItems, wishlistItems, setWishlistItems }) {
   const { id, name, basePrice, description, colors, sizes, delivery } =
@@ -10,34 +14,22 @@ export default function ProductPage({ cartItems, setCartItems, wishlistItems, se
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
-  const [shareUrl, setShareUrl] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") setShareUrl(window.location.href);
-  }, []);
-
-  const facebookHref = useMemo(
-    () =>
-      shareUrl
-        ? `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-            shareUrl
-          )}`
-        : "#",
-    [shareUrl]
+  
+  const { toastMessage, showToast } = useToast();
+  const { shareUrl, facebookHref, xHref } = useShareLinks();
+  const shareBarRef = useRef(null);
+  
+  const { isFavorite, handleToggleFavorite } = useFavorite(
+    id,
+    name,
+    basePrice,
+    selectedColor,
+    wishlistItems,
+    setWishlistItems
   );
 
-  const xHref = useMemo(
-    () =>
-      shareUrl
-        ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-            shareUrl
-          )}`
-        : "#",
-    [shareUrl]
-  );
+  useClickOutside(shareBarRef, () => setExpanded(false));
 
   const handleColorChange = (color) => {
     if (color.name === selectedColor.name) return;
@@ -58,34 +50,8 @@ export default function ProductPage({ cartItems, setCartItems, wishlistItems, se
     };
     setCartItems((prev) => [...prev, newItem]);
     setQuantity(1);
-    setToastMessage(`Added ${quantity} ${quantity === 1 ? "item" : "items"} to cart!`);
-    setTimeout(() => {
-      setToastMessage("");
-    }, 3000);
+    showToast(`Added ${quantity} ${quantity === 1 ? "item" : "items"} to cart!`);
   };
-
-  const handleToggleFavorite = () => {
-    const item = {
-      id,
-      name,
-      color: selectedColor.name,
-      image: selectedColor.image,
-      price: basePrice,
-    };
-    
-    if (isFavorite) {
-      setWishlistItems((prev) => prev.filter((w) => w.id !== id));
-      setIsFavorite(false);
-    } else {
-      setWishlistItems((prev) => [...prev, item]);
-      setIsFavorite(true);
-    }
-  };
-
-  useEffect(() => {
-    const isInWishlist = wishlistItems.some((item) => item.id === id);
-    setIsFavorite(isInWishlist);
-  }, [wishlistItems, id]);
 
   const handleRemoveItem = (index) => {
     setCartItems((prev) => prev.filter((_, i) => i !== index));
@@ -110,17 +76,7 @@ export default function ProductPage({ cartItems, setCartItems, wishlistItems, se
   const handleIncrease = () => setQuantity((q) => q + 1);
 
   const deliveryDate = useDeliveryDate(delivery);
-
   const cartTotal = cartItems.reduce((sum, item) => sum + item.total, 0);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      const shareBar = document.querySelector(".share-bar");
-      if (shareBar && !shareBar.contains(e.target)) setExpanded(false);
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
 
   return (
     <main className="product-page">
@@ -134,7 +90,7 @@ export default function ProductPage({ cartItems, setCartItems, wishlistItems, se
         </div>
 
         <header className="product-header">
-          <div className="share-bar">
+          <div className="share-bar" ref={shareBarRef}>
             <i
               className="material-symbols-outlined filled share-icon"
               title="Share"
